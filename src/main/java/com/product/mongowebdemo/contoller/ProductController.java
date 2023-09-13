@@ -32,8 +32,7 @@ public class ProductController {
 
     @PostMapping("/create")
     public Product createProduct(@RequestBody Product product) {
-        Product newProduct = productRepository.save(product);
-        return newProduct;
+        return productRepository.save(product);
     }
 
 	/*
@@ -43,16 +42,16 @@ public class ProductController {
 	 */
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@PathVariable String id, @ModelAttribute Product product) {
+    public Product updateProduct(@PathVariable String id, @RequestBody Product product) {
         product.setId(id);
         productRepository.save(product);
-        return "redirect:/products";
+        return productRepository.findById(id).orElse(null);
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable String id) {
+    public List<Product> deleteProduct(@PathVariable String id) {
         productRepository.deleteById(id);
-        return "redirect:/products";
+        return productRepository.findAll();
     }
     
 }
